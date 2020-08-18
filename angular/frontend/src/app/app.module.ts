@@ -2,20 +2,39 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
+import { RouterModule, Routes} from '@angular/router'
+
 import { AppComponent } from './app.component';
 import { TasksComponent } from './tasks/tasks.component';
+import { ProfileComponent } from './profile/profile.component'
+import { LoginComponent } from './login/login.component'
+import { RegisterComponent } from './register/register.component'
+import { AuthenticationService } from './authentication.service'
+import { AuthGuardService } from './auth-guard.service'
+
+
+
+const routes: Routes = [
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
+]
 
 @NgModule({
   declarations: [
     AppComponent,
-    TasksComponent
+    TasksComponent,
+    ProfileComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [AuthenticationService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

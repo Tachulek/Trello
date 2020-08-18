@@ -9,6 +9,12 @@ const server = Hapi.server({
     routes: 
     {
         cors: true
+        // {
+        //     origin: ['*'],
+        //     credentials: true,
+        //     additionalHeaders: ['Access-Control-Allow-Origin'],
+        //     additionalExposedHeaders: ['Access-Control-Allow-Origin']
+        // }
     }
 });
 
@@ -20,11 +26,14 @@ server.app.db = mongoose.connect(
 );
 
 const init = async() => {
-    await server.register(
+    await server.register([
     {
-        plugin: require('./routes/tasks'),
+        plugin: require('./routes/tasks')
     },
     {
+        plugin: require('./routes/users')
+    }],
+    { 
         routes:
         {
             prefix: '/api'

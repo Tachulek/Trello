@@ -14,7 +14,7 @@ exports.plugin = {
          handler: (request, h) =>
          {
             const payload = request.payload;
-            return 'hello ' + payload;
+            return 'hello world';
          }
       })
 
@@ -39,6 +39,7 @@ exports.plugin = {
       {
          method: 'GET',
          path: '/tasks/{id}',
+         
          handler: (req, h) => 
          {
             return Task.findOne(
@@ -111,6 +112,10 @@ exports.plugin = {
       {
          method: 'DELETE',
          path: '/tasks/{id}',
+         options:
+         {
+            cors: true
+         },
          handler: (req, h) => 
          {
             return Task.findOneAndDelete(
