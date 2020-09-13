@@ -1,0 +1,24 @@
+<form class="form" (submit)="add(tableTitle.value); tableTitle.value='' ">
+   <div class="form-group">
+      <input #tableTitle class="form-control" placeholder="New Table">
+   </div>
+   <input type="submit" value="SUBMIT" class="btn btn-success btn-lg btn-block">
+</form>
+
+<table class="tb">
+   <tr *ngFor="let table of tables">
+      <td class="text-left">
+            <span *ngIf="table!==editTable">{{table.tableName}}</span>
+      </td>
+      <td>
+            <button class="btn btn-success" (click)="open(table._id)">Open</button>
+      </td>
+      <td class="text-right">
+         <button class="btn btn-danger" (click)="delete(table)">Delete</button>
+      </td>
+   </tr>
+</table>
+
+<div class="card card-body bg-light text-center">
+   <span class="small">*click on the item to edit and just click anywhere to update</span>
+</div>

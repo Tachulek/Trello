@@ -32,6 +32,9 @@ const init = async() => {
     },
     {
         plugin: require('./routes/users')
+    },
+    {
+        plugin: require('./routes/tables')
     }],
     { 
         routes:

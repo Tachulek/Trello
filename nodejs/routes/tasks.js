@@ -2,6 +2,8 @@
 
 const mongoose = require('mongoose');
 const Task = require('../models/Task')
+var bodyParser = require('body-parser')
+
 
 exports.plugin = {
    register: (server, options) => 
@@ -67,8 +69,14 @@ exports.plugin = {
          path: '/task',
          handler: (req, h) => 
          {
+            var payload = req.payload
+            console.log("req : " + payload)
+            console.log("req2: " + req.body)
             var task = new Task()
-            task.task_name = req.payload.task_name;
+            console.log("/task task1: " + task)
+            task.taskName = String(payload.taskName);
+            task.tableId = payload.tableId;
+            console.log("/task task: " + task)
 
             return task.save().then((err, res) => {
                if(err)
@@ -105,6 +113,26 @@ exports.plugin = {
                   }
                   return 204;
                })
+         }
+      })
+
+     server.route(
+      {
+         method: 'GET',
+         path: `/table/{id}`,
+         handler: (request, h) =>
+         {
+            console.log("tableGET: " + request.params.id)
+            return Task.find({tableId: request.params.id},(err, res) => 
+            {
+               if(err)
+               {
+                  console.log("notablesfoundGET")
+                  console.log(err)
+                  return err;
+               }
+               return res;
+            })
          }
       })
 
@@ -148,5 +176,5 @@ exports.plugin = {
       })
 
    },
-   name: 'api'
+   name: 'tasks'
 }

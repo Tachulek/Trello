@@ -6,6 +6,7 @@ import { RouterModule, Routes} from '@angular/router'
 
 import { AppComponent } from './app.component';
 import { TasksComponent } from './tasks/tasks.component';
+import { TablesComponent } from './tables/tables.component';
 import { ProfileComponent } from './profile/profile.component'
 import { LoginComponent } from './login/login.component'
 import { RegisterComponent } from './register/register.component'
@@ -18,12 +19,14 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
+  {path: 'table/:id', component: TasksComponent}
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     TasksComponent,
+    TablesComponent,
     ProfileComponent,
     LoginComponent,
     RegisterComponent,
