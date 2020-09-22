@@ -1,10 +1,9 @@
-
 'use strict'
 
 const mongoose = require('mongoose');
-const Table = require('../models/Table')
 const List = require('../models/List')
 const Task = require('../models/Task')
+
 
 exports.plugin = {
    register: (server, options) => 
@@ -13,19 +12,42 @@ exports.plugin = {
       server.route(
       {
          method: 'GET',
-         path: `/{id}/tables`,
-         handler: (request, h) =>
+         path: '/lists',
+         handler: (req, h) => 
          {
-            console.log("GET: " + request.params.id)
-            return Table.find({userId: request.params.id},(err, res) => 
+            return List.find((err, res) => 
             {
                if(err)
                {
-                  console.log("notablesfoundGET")
-                  console.log(err)
                   return err;
                }
                return res;
+            })
+         }
+      }),
+
+      server.route(
+      {
+         method: 'GET',
+         path: '/lists/{id}',
+         
+         handler: (req, h) => 
+         {
+            return List.findOne(
+            {
+               _id: mongoose.Types.ObjectId(req.params.id)
+            },
+            (err, doc) => 
+            {
+               if(err)
+               {
+                  return err, 'Internal MongoDB error';
+               }
+               if(!doc)
+               {
+                  return 'Not Found'
+               }
+               return doc;
             })
          }
       }),
@@ -33,42 +55,37 @@ exports.plugin = {
       server.route(
       {
          method: 'POST',
-         path: `/{id}/table`,
+         path: '/list',
          handler: (req, h) => 
          {
-            var table = new Table()
-            console.log("2 "+ req.payload.tableTitle)
-            table.tableName = req.payload.tableName;
-            console.log("3 "+table.tableName)
-            table.userId = req.params.id
-            console.log("4 "+ table.userId)
+            var payload = req.payload
+            var list = new List()
+            list.listName = payload.listName;
+            list.tableId = payload.tableId;
+            console.log("/list list: " + list)
 
-            return table.save().then((err, res) => {
+            return list.save().then((err, res) => {
                if(err)
                {
-                  console.log("tableERRORPOST")
-                  console.log(err)
                   return err;
                }
-               console.log("tablenoerrPOST")
                return res;
             })
          }
       }),
 
-
       server.route(
       {
          method: 'PUT',
-         path: '/table/{id}',
+         path: '/list/{id}',
          handler: (req, h) => 
          {
-            return Table.findOneAndUpdate(
+            return List.findOneAndUpdate(
                {
                   _id: mongoose.Types.ObjectId(req.params.id)
                },
                {
-                  tableName: req.payload.tableName   
+                  listName: req.payload.listName   
                },
                (err, result) => 
                {
@@ -85,18 +102,36 @@ exports.plugin = {
          }
       }),
 
+     server.route(
+      {
+         method: 'GET',
+         path: `/table/{id}`,
+         handler: (request, h) =>
+         {
+            console.log("tableGET: " + request.params.id)
+            return List.find({tableId: request.params.id},(err, res) => 
+            {
+               if(err)
+               {
+                  console.log("notablesfoundGET")
+                  console.log(err)
+                  return err;
+               }
+               return res;
+            })
+         }
+      }),
+
       server.route(
       {
          method: 'DELETE',
-         path: '/table/{id}',
+         path: '/list/{id}',
          options:
          {
             cors: true
          },
          handler: (req, h) => 
          {
-            console.log("yyy " + req.params.id)
-
 
             Task.deleteMany({tableId: req.params.id},(err, res) => 
             {
@@ -110,19 +145,7 @@ exports.plugin = {
                }
             })
             
-            List.deleteMany({tableId: req.params.id},(err, res) => 
-            {
-               if(err)
-               {
-                  console.log('Issue with deleting task from table');
-               }
-               if(res && res.n === 0)
-               {
-                  console.log('no task found');
-               }
-            })
-            
-            return Table.findOneAndDelete(
+            return List.findOneAndDelete(
                {
                   _id: mongoose.Types.ObjectId(req.params.id)
                },
@@ -134,7 +157,7 @@ exports.plugin = {
                   }
                   if(result && result.n === 0)
                   {
-                     return 'Not founddddd';
+                     return 'Not found';
                   }
                   else if(!result)
                   {
@@ -145,6 +168,7 @@ exports.plugin = {
          }
       })
 
+
    },
-   name: 'tables'
+   name: 'lists'
 }

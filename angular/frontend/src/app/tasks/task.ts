@@ -1,4 +1,8 @@
 export interface Task {
-   _id: number
-   task_name: string
+   tableId: string,
+   listId: string;
+   taskName: string;
+   _id?: number;
+   comments: string[];
+   orders: string[];
 }

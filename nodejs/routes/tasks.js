@@ -75,6 +75,7 @@ exports.plugin = {
             var task = new Task()
             console.log("/task task1: " + task)
             task.taskName = String(payload.taskName);
+            task.listId = payload.listId;
             task.tableId = payload.tableId;
             console.log("/task task: " + task)
 
@@ -86,7 +87,7 @@ exports.plugin = {
                return res;
             })
          }
-      })
+      }),
 
       server.route(
       {
@@ -94,12 +95,18 @@ exports.plugin = {
          path: '/task/{id}',
          handler: (req, h) => 
          {
+            console.log("PUT "+req.payload)
+            console.log("COMMENTS: "+ req.payload.comments)
             return Task.findOneAndUpdate(
                {
                   _id: mongoose.Types.ObjectId(req.params.id)
                },
                {
-                  task_name: req.payload.task_name   
+                  taskName: req.payload.taskName,
+                  tableId: req.payload.tableId,
+                  listId: req.payload.listId,
+                  comments: req.payload.comments,
+                  orders: req.payload.orders
                },
                (err, result) => 
                {
@@ -114,16 +121,16 @@ exports.plugin = {
                   return 204;
                })
          }
-      })
+      }),
 
      server.route(
       {
          method: 'GET',
-         path: `/table/{id}`,
+         path: `/list/{id}`,
          handler: (request, h) =>
          {
-            console.log("tableGET: " + request.params.id)
-            return Task.find({tableId: request.params.id},(err, res) => 
+            console.log("listGET: " + request.params.id)
+            return Task.find({listId: request.params.id},(err, res) => 
             {
                if(err)
                {
@@ -134,12 +141,12 @@ exports.plugin = {
                return res;
             })
          }
-      })
+      }),
 
       server.route(
       {
          method: 'DELETE',
-         path: '/tasks/{id}',
+         path: '/task/{id}',
          options:
          {
             cors: true
@@ -165,15 +172,6 @@ exports.plugin = {
          }
       })
 
-      server.route({
-         method: 'GET',
-         path:'/hello/{name}', 
-         handler: (request, reply) =>
-         {
-            // Passed parameter is accessible via "request.params" 
-            return `Hello ${request.params.name}`;
-         }
-      })
 
    },
    name: 'tasks'

@@ -5,7 +5,7 @@ import {Observable} from 'rxjs'
 
 import {Table} from './table'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TablesService {
    constructor(private http: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class TablesService {
    }
 
    updateTable(table: Table): Observable<Table> {
-      const url = `http://localhost:3000/api/Table/${table._id}`
+      const url = `http://localhost:3000/api/table/${table._id}`
       return this.http.put<Table>(url, table)
    }
 }

@@ -1,0 +1,27 @@
+<form class="form" (submit)="add(listTitle.value); listTitle.value='' ">
+   <div class="form-group">
+      <input #listTitle class="form-control" placeholder="List Name">
+   </div>
+   <input type="submit" value="SUBMIT" class="btn btn-success btn-lg btn-block">
+</form>
+
+<table class="table">
+   <tr *ngFor="let list of lists">
+      <td class="text-left">
+         <a (click)="edit(list)">
+            <span *ngIf="list!==editList">{{list.listName}}</span>
+            <input *ngIf="list===editList" [(ngModel)]="list.listName" (blur)="update()" (keyup.enter)="update()" />
+         </a>
+      </td>
+      <td class="text-right">
+         <button class="btn btn-success" (click)="open(list._id)">Open</button>
+         <button class="btn btn-danger" (click)="delete(list)">Delete</button>
+      </td>
+   </tr>
+</table>
+
+<div><button class="btn btn-block" (click)="return()">Return to Tables</button></div>
+
+<div class="card card-body bg-light text-center">
+   <span class="small">*click on the item to edit and just click anywhere to update</span>
+</div>

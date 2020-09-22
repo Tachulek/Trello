@@ -9,15 +9,43 @@
    <tr *ngFor="let task of tasks">
       <td class="text-left">
          <a (click)="edit(task)">
-            <span *ngIf="task!==editTask">{{task.task_name}}</span>
-            <input *ngIf="task===editTask" [(ngModel)]="task.task_name" (blur)="update()" (keyup.enter)="update()" />
+            <span *ngIf="task!==editTask">{{task.taskName}}</span>
+            <input *ngIf="task===editTask" [(ngModel)]="task.taskName" (blur)="update()" (keyup.enter)="update()" />
          </a>
+         <div *ngIf="visibleComments.includes(task.taskName)">
+            <tr *ngFor="let comment of task.comments">
+               <td>{{comment}}</td><td><button class="btn btn-danger" (click)="deleteComment(task, comment)">del</button></td>
+            </tr>
+            <form (submit)="addComment(commentInput.value, task)">
+               <div class="form-group">
+                  <input #commentInput type="comment" class="form-control" name="Order" placeholder="Enter comment" >
+               </div>
+               <button type="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
+            </form>
+         </div>
+         <div *ngIf="visibleOrders.includes(task.taskName)">
+            <tr *ngFor="let order of task.orders">
+               <td style="color:red;size:12px;">{{order}}</td><td><button class="btn btn-danger" (click)="deleteOrder(task, order)">del</button></td>
+            </tr>
+            <form (submit)="addOrder(orderInput.value, task)">
+               <div class="form-group">
+                  <input #orderInput type="order" class="form-control" name="Order" placeholder="Enter order" >
+               </div>
+               <button type="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
+            </form>
+         </div>
       </td>
       <td class="text-right">
+         <button class="btn btn-info" (click)="toggleOrders(task.taskName)">Orders</button>
+         <button class="btn btn-warning" (click)="toggleComments(task.taskName)">Comments</button>
          <button class="btn btn-danger" (click)="delete(task)">Delete</button>
       </td>
    </tr>
 </table>
+
+
+<div><button class="btn btn-block" (click)="return()">Return to Lists</button></div>
+
 
 <div class="card card-body bg-light text-center">
    <span class="small">*click on the item to edit and just click anywhere to update</span>

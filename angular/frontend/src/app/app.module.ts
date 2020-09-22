@@ -6,10 +6,16 @@ import { RouterModule, Routes} from '@angular/router'
 
 import { AppComponent } from './app.component';
 import { TasksComponent } from './tasks/tasks.component';
+import { ListsComponent } from './lists/lists.component';
 import { TablesComponent } from './tables/tables.component';
 import { ProfileComponent } from './profile/profile.component'
 import { LoginComponent } from './login/login.component'
+import { ComponentLoaderComponent } from './componentLoader.component'
 import { RegisterComponent } from './register/register.component'
+
+import { ComponentLoaderHostDirective } from './componentLoader-host.directive'
+
+
 import { AuthenticationService } from './authentication.service'
 import { AuthGuardService } from './auth-guard.service'
 
@@ -19,17 +25,21 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
-  {path: 'table/:id', component: TasksComponent}
+  {path: 'table/:id', component: ListsComponent},
+  {path: 'list/:id', component: TasksComponent}
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     TasksComponent,
+    ListsComponent,
     TablesComponent,
     ProfileComponent,
     LoginComponent,
     RegisterComponent,
+    ComponentLoaderHostDirective,
+    ComponentLoaderComponent
   ],
   imports: [
     BrowserModule,

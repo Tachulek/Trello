@@ -23,8 +23,7 @@ exports.plugin = {
 
         return User.findOne({
           email: req.payload.email
-        })
-          .then(user => {
+        }).then(user => {
             if (!user) {
               bcrypt.hash(req.payload.password, 10, (err, hash) => {
                 userData.password = hash
@@ -46,6 +45,7 @@ exports.plugin = {
           })
       }
     }),
+
       server.route({
         method: 'POST',
         path: '/users/login',
@@ -78,6 +78,7 @@ exports.plugin = {
             })
         }
       }),
+
       server.route({
         method: 'GET',
         path: '/users/profile',
@@ -103,6 +104,7 @@ exports.plugin = {
             })
         }
       }),
+
       server.route({
          method: 'GET',
          path: '/users/getuser/{id}',
@@ -115,18 +117,14 @@ exports.plugin = {
          console.log(req.headers)
          console.log(req.headers.authorization)
             try {
-            decoded = jwt.verify(
-            req.headers.authorization,
-            process.env.SECRET_KEY);
-            } catch(err) {
-            console.log(err)
+              decoded = jwt.verify(
+              req.headers.authorization,
+              process.env.SECRET_KEY);
+            } catch(err) 
+            {
+              console.log(err)
             }           
 
-
-         //    var decoded = jwt.verify(
-         //    req.headers.authorization,
-         //    process.env.SECRET_KEY
-         //  )
             console.log("find one!")
             return User.findOne({
                _id: mongoose.Types.ObjectId(decoded.id)

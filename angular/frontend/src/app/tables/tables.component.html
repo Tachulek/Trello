@@ -8,12 +8,13 @@
 <table class="tb">
    <tr *ngFor="let table of tables">
       <td class="text-left">
+         <a (click)="edit(table)">
             <span *ngIf="table!==editTable">{{table.tableName}}</span>
-      </td>
-      <td>
-            <button class="btn btn-success" (click)="open(table._id)">Open</button>
+            <input *ngIf="table===editTable" [(ngModel)]="table.tableName" (blur)="update()" (keyup.enter)="update()" />
+         </a>
       </td>
       <td class="text-right">
+         <button class="btn btn-success" (click)="open(table._id)">Open</button>
          <button class="btn btn-danger" (click)="delete(table)">Delete</button>
       </td>
    </tr>

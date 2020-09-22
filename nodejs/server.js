@@ -35,6 +35,9 @@ const init = async() => {
     },
     {
         plugin: require('./routes/tables')
+    },
+    {
+        plugin: require('./routes/lists')
     }],
     { 
         routes:
